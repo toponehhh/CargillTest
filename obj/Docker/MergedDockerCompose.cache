@@ -1,0 +1,42 @@
+name: dockercompose11606271821744585572
+services:
+  cargilltest.api:
+    build:
+      context: C:\Users\EliteDev\source\repos\CargillTest
+      dockerfile: ./CargillTest.API/Dockerfile
+    environment:
+      ASPNETCORE_APP_PORT: "13001"
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_HTTP_PORTS: "8080"
+      ASPNETCORE_SHOW_SWAGGER_IN_PRODUCTION: "true"
+    networks:
+      CargillTestAppNet: null
+    ports:
+      - mode: ingress
+        target: 13001
+        published: "13001"
+        protocol: tcp
+      - mode: ingress
+        target: 8080
+        protocol: tcp
+  cargilltest.ui:
+    build:
+      context: C:\Users\EliteDev\source\repos\CargillTest\cargilltest-ui
+      dockerfile: Dockerfile
+    depends_on:
+      cargilltest.api:
+        condition: service_started
+        required: true
+    environment:
+      PORT: "13000"
+    networks:
+      CargillTestAppNet: null
+    ports:
+      - mode: ingress
+        target: 13000
+        published: "13000"
+        protocol: tcp
+networks:
+  CargillTestAppNet:
+    name: dockercompose11606271821744585572_CargillTestAppNet
+    driver: bridge

@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  # Backend of the application (ASP.NET Core)
+  cargilltest.api:
+    build:
+      context: .
+      dockerfile: ./CargillTest.API/Dockerfile
+    ports:
+      - "13001:13001"
+    environment:
+        ASPNETCORE_ENVIRONMENT: "Production"
+        ASPNETCORE_SHOW_SWAGGER_IN_PRODUCTION: "true"
+        ASPNETCORE_APP_PORT: "13001"
+        ASPNETCORE_HTTP_PORTS: "13001"
+    networks:
+      - CargillTestAppNet
+
+  # Frontend of the application (React)
+  cargilltest.ui:
+    build:
+      context: ./cargilltest-ui
+      dockerfile: Dockerfile
+    ports:
+      - "13000:13000"
+    environment:
+      PORT: "13000"
+    depends_on:
+      - cargilltest.api
+    networks:
+      - CargillTestAppNet
+networks:
+  CargillTestAppNet:
+    driver: bridge

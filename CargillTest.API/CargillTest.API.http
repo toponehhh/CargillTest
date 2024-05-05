@@ -1,0 +1,6 @@
+@CargillTest.API_HostAddress = http://localhost:13001
+
+GET {{CargillTest.API_HostAddress}}/ReconcillationReport/
+Accept: application/json
+
+###
